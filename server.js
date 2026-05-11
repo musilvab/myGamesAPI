@@ -94,14 +94,14 @@ app.put('/jogos/:id', async (req, res) => {
 app.delete('/jogos/:id', async (req, res) => {
     try {
         const idConvertido = Number(req.params.id);
-        await prisma.game.delete({
-            where: {
-                id: idConvertido
-            }
+        const resultado = await prisma.game.delete({
+            where: { id: idConvertido }
         })
+        console.log("Resultado do delete:", resultado); // Isso vai aparecer no LOG do Railway
         res.status(204).end()
     } catch (error) {
-        res.status(500).json({ error: "Erro ao deletar o jogo" })
+        console.error("ERRO REAL:", error); // Isso vai mostrar o erro exato
+        res.status(500).json({ error: error.message })
     }
 })
 
