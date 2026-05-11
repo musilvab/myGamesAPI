@@ -107,5 +107,3 @@ app.delete('/jogos/:id', async (req, res) => {
 
 app.listen(3000)
 
-// username: musilvab
-// password: buq5e8UiGhETVVYW
