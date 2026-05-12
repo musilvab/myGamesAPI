@@ -57,10 +57,12 @@ app.get('/jogos/:id', async (req, res) => {
     try {
         const idConvertido = Number(req.params.id);
         const jogo = await prisma.game.findUnique({
-            where: {
-                id: idConvertido
-            }
+            where: { id: idConvertido }
         })
+
+        if (!jogo) {
+            return res.status(404).json({ error: "Jogo não encontrado" });
+        }
 
         res.status(200).json(jogo)
     } catch (error) {
@@ -73,10 +75,16 @@ app.put('/jogos/:id', async (req, res) => {
     try {
         const idConvertido = Number(req.params.id);
 
+        const jogoExistente = await prisma.game.findUnique({
+            where: { id: idConvertido }
+        });
+        
+        if (!jogoExistente) {
+            return res.status(404).json({ error: "Jogo não encontrado" });
+        }
+
         const jogoAtualizado = await prisma.game.update({ 
-            where: {
-                id: idConvertido
-            },
+            where: { id: idConvertido },
             data: {
                   nome: req.body.nome,
                   tipo: req.body.tipo,
@@ -89,19 +97,25 @@ app.put('/jogos/:id', async (req, res) => {
         res.status(500).json({ error: "Erro ao atualizar o jogo" })
     }
 })
-
 // DELETE: Remove a review do sistema.
 app.delete('/jogos/:id', async (req, res) => {
     try {
         const idConvertido = Number(req.params.id);
-        const resultado = await prisma.game.delete({
+
+        const jogoExistente = await prisma.game.findUnique({
+            where: { id: idConvertido }
+        });
+
+        if (!jogoExistente) {
+            return res.status(404).json({ error: "Jogo não encontrado" });
+        }
+
+        await prisma.game.delete({
             where: { id: idConvertido }
         })
-        console.log("Resultado do delete:", resultado); // Isso vai aparecer no LOG do Railway
         res.status(204).end()
     } catch (error) {
-        console.error("ERRO REAL:", error); // Isso vai mostrar o erro exato
-        res.status(500).json({ error: error.message })
+        res.status(500).json({ error: "Erro ao deletar o jogo" })
     }
 })
 
