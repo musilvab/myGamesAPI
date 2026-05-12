@@ -10,7 +10,7 @@ app.use(express.json())
 //LOGIN: Autenticação exigida pela prova
 app.post('/login', (req, res) => {
     if (req.body.email === "usuario@esoft.com" && req.body.password === "Abc123") {
-        res.status(200).json({ token: uuidv4() });
+        res.status(200).json({ token: "550e8400-e29b-41d4-a716-446655440000" });
     } else {
         res.status(401).json({ error: "Credenciais invalidas" });
     }
@@ -97,6 +97,7 @@ app.put('/jogos/:id', async (req, res) => {
         res.status(500).json({ error: "Erro ao atualizar o jogo" })
     }
 })
+
 // DELETE: Remove a review do sistema.
 app.delete('/jogos/:id', async (req, res) => {
     try {
